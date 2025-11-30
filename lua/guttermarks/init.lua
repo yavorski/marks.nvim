@@ -109,19 +109,21 @@ function M.setup(opts)
         end,
       })
     else
-      vim.keymap.set("n", "m", function()
-        local char = vim.fn.getchar()
-        local key = vim.fn.nr2char(char)
-        vim.api.nvim_feedkeys("m" .. key, "n", true)
+      if M.config.m_key then
+        vim.keymap.set("n", "m", function()
+          local char = vim.fn.getchar()
+          local key = vim.fn.nr2char(char)
+          vim.api.nvim_feedkeys("m" .. key, "n", true)
 
-        if require("guttermarks.utils").is_upper(key) then
-          vim.schedule(function()
-            M.refresh({ buf = -1 })
-          end)
-        else
-          vim.schedule(M.refresh)
-        end
-      end, { desc = "Set mark (with gutter update)" })
+          if require("guttermarks.utils").is_upper(key) then
+            vim.schedule(function()
+              M.refresh({ buf = -1 })
+            end)
+          else
+            vim.schedule(M.refresh)
+          end
+        end, { desc = "Set mark (with gutter update)" })
+      end
     end
   end
 
@@ -223,8 +225,10 @@ function M.enable(is_enabled)
   M.is_enabled = is_enabled
   if M.is_enabled then
     M.refresh({ buf = -1 })
+    vim.api.nvim_exec_autocmds("User", { pattern = "MarksEnabled" })
   else
     M._clear()
+    vim.api.nvim_exec_autocmds("User", { pattern = "MarksDisabled" })
   end
 end
 

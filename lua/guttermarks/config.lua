@@ -8,6 +8,7 @@
 ---@field marks? string[] List of special mark characters to display
 
 ---@class guttermarks.Config
+---@field m_key? boolean Refresh marks on 'm' key
 ---@field local_mark? guttermarks.MarkConfig Configuration for local marks (a-z)
 ---@field global_mark? guttermarks.MarkConfig Configuration for global marks (A-Z)
 ---@field special_mark? guttermarks.SpecialMarkConfig Configuration for special marks
@@ -18,6 +19,7 @@
 ---Default configuration
 ---@type guttermarks.Config
 return {
+  m_key = true,
   local_mark = {
     enabled = true,
     sign = nil,
